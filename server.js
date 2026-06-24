@@ -22,12 +22,12 @@ app.use('/', indexRouter);
 app.use('/api/cars', carRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
 
   // render the error json
   res.status(err.status || 500);
@@ -39,8 +39,11 @@ app.use(function(err, req, res, next) {
   );
 });
 
-// Initialize the server
-var port = process.env.PORT || 3000;
-app.listen(port);
+// Initialize the server only when running locally
+if (require.main === module) {
+  var port = process.env.PORT || 3000;
+  app.listen(port);
+  console.log(`Server running at http://localhost:${port}/`);
+}
 
-console.log(`Server running at http://localhost:${port}/`);
+module.exports = app;

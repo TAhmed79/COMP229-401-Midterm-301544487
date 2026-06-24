@@ -5,9 +5,13 @@ module.exports.getCar = async function (req, res, next) {
     // Find one using the id sent in the parameter of the request
     let car = await CarModel.findOne({ _id: req.params.id });
 
-    // Set the response status
+    // Send a response
     res.status(200);
-
+    res.json({
+      success: true,
+      message: "Car retrieved successfully.",
+      data: car
+    });
 
   } catch (error) {
     console.log(error);
@@ -51,9 +55,9 @@ module.exports.getAll = async function (req, res, next) {
     res.status(200);
     // Send a response
     res.json({
-        success: true,
-        message: "Car list retrieved successfully.",
-        data: list
+      success: true,
+      message: "Car list retrieved successfully.",
+      data: list
     });
 
   } catch (error) {
@@ -66,23 +70,25 @@ module.exports.update = async function (req, res, next) {
   try {
     // Create a car object from the request body
     let updatedCar = CarModel(req.body);
-    
+
     // Change the _id to use the one received in the request parameters.
     updatedCar._id = req.params.id;
 
     // Submit the change
-    let result = await CarModel.updateOne();
+    let result = await CarModel.updateOne(
+      { _id: req.params.id },
+      updatedCar
+    );
+
     console.log("Result: " + result);
 
     // Handle the result: send a response.
     if (result.modifiedCount > 0) {
       res.status(200);
-      res.json(
-        {
-          success: true,
-          message: "Car updated successfully."
-        }
-      );
+      res.json({
+        success: true,
+        message: "Car updated successfully."
+      });
     } else {
       throw new Error('Car not updated. Are you sure it exists?')
     }
@@ -97,7 +103,7 @@ module.exports.update = async function (req, res, next) {
 module.exports.remove = async function (req, res, next) {
   try {
     // Delete  using the id received in the parameter of the request
-    let result = await CarModel.deleteOne({ _id: req.params.carId });
+    let result = await CarModel.deleteOne({ _id: req.params.id });
     console.log("Result: " + result);
 
     // Handle the result and send a response

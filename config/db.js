@@ -1,8 +1,10 @@
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '1.1.1.1']);
+
 require('dotenv').config()
 const mongoose = require('mongoose');
 
-let ConnectionString = "mongodb+srv://[username]:[password]@[hostname]/[Database]"
-
+let ConnectionString = "mongodb+srv://user:tahseen123@cluster0.vz0ta36.mongodb.net/carstore?retryWrites=true&w=majority&appName=Cluster0"
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
 module.exports = async function () {
@@ -13,7 +15,7 @@ module.exports = async function () {
     console.log("==== Backend successfully connected to MongoDB!");
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
-    
+
     // Ensures that the client will close when you finish/error
     await mongoose.disconnect();
   }
